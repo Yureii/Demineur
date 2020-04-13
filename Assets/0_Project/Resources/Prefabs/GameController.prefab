@@ -1235,7 +1235,7 @@ MonoBehaviour:
         - REVEAL_MINE_FLAGGED
         - APPLICATION QUIT
         - ADD_BOARD
-        byteData: 72000000200000001b0000000f010000
+        byteData: 72000000200000001b00000009000000
         arrayParamSizes: 
         arrayParamTypes: []
         customTypeSizes: 
