@@ -9,7 +9,7 @@ public class Monster : Player
 
     void Start()
     {
-        maxHealth = 5;
+        maxHealth = 10;
         type = PlayerType.BOT;
         
         healthBar = GameObject.FindWithTag("BotUI").GetComponent<HealthBar>();

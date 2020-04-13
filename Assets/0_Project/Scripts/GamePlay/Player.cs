@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
 
     public int health;
     public HealthBar healthBar;
-    public int maxHealth = 5;
+    public int maxHealth = 15;
     public bool dead = false;
     public PlayMakerFSM _fsm;
     public PlayerType type;
