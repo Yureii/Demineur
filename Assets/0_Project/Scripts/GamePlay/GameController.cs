@@ -9,7 +9,7 @@ namespace Main {
 public class GameController : MonoBehaviour
 {
     // These are containing our game data
-    // -- They are arrays since we ought to have
+    // -- They are arrays since we are ought to have
     // -- multiple instances of each.
     public Board[] _boards;
     public Player[] _players;
