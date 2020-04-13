@@ -6,20 +6,26 @@ using HutongGames.PlayMaker;
 namespace Main {
 
 
-public class Player
+public class Player : MonoBehaviour
 {
 
     public int health;
-    
+    public HealthBar healthBar;
+    public int maxHealth = 5;
     public bool dead = false;
     public PlayMakerFSM _fsm;
     public PlayerType type;
 
-    public Player() 
+    void Start()
     {
-        health = 10;
+        
+        healthBar = GameObject.FindWithTag("PlayerUI").GetComponent<HealthBar>();
         type = PlayerType.HUMAN;
-        _fsm = GameObject.FindWithTag("Player").GetComponent<PlayMakerFSM>();
+
+        Init();
+    }
+    public Player() 
+    {        
     }
 
     public int TakeDamage(int amount)
@@ -40,38 +46,25 @@ public class Player
         health = 0;
         Debug.Log("HUMAN DEAD");
          
-        _fsm.SendEvent("DIE");
+        PlayMakerUtils.SendEventToGameObjectFsmByName(null, GameObject.FindWithTag("Player"), "FSM_Player_UI", 
+                                                "DIE",null);
 
     }
 
-    public void UpdateUI()
+    public virtual void UpdateUI()
     {
-        FsmInt FSM_hp = _fsm.FsmVariables.GetFsmInt("UI_HitPoints");
-        FSM_hp.Value = health;
-        _fsm.SendEvent("UPDATE_HITPOINTS");
+        PlayMakerUtils.SendEventToGameObjectFsmByName(null, GameObject.FindWithTag("Player"), "FSM_Player_UI", 
+                                                "UPDATE_HITPOINTS",null);
+        healthBar.SetHealth(health);
+
     }
 
-}
-
-public class Monster : Player 
-{
-    public Monster()
+    public void Init()
     {
-        type = PlayerType.BOT;
-        health = 20;
-        _fsm = GameObject.FindWithTag("Bot").GetComponent<PlayMakerFSM>();
-        Debug.Log("New monster");
-        
+        health = maxHealth; 
+        healthBar.SetMaxHealth(health);
     }
 
-    public override void Death()
-    {
-        health = 0;
-        Debug.Log("BOT DEAD");
-         
-        _fsm.SendEvent("DIE");
-
-    }
 
 
 }

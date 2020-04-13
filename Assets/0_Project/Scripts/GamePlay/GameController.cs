@@ -12,7 +12,11 @@ public class GameController : MonoBehaviour
     // -- They are arrays since we are ought to have
     // -- multiple instances of each.
     public Board[] _boards;
-    public Player[] _players;
+    public Player _player;
+    public Monster _monster;
+
+    public int[] BoardChoice;
+
     public GameObject[] _buttons;
 
     public PlayMakerFSM _fsm;
@@ -31,6 +35,7 @@ public class GameController : MonoBehaviour
     void Start()
     {
         _fsm = GameObject.FindWithTag("GameController").GetComponent<PlayMakerFSM>();
+
     }
 
     void Update()
@@ -42,13 +47,14 @@ public class GameController : MonoBehaviour
     #region Boards and Players Initialization
     public bool InitButtons() 
     {
-        _buttons = new GameObject[3];
+        /*
+        _buttons = new GameObject[2];
         _buttons[0] = GameObject.Find("Button-0");
-        _buttons[1] = GameObject.Find("Button-1");
-        _buttons[2] = GameObject.Find("Button-2");
+        //_buttons[1] = GameObject.Find("Button-1");
+        _buttons[1] = GameObject.Find("Button-2");
 
         RandomizeButtons();
-
+        */
         return true;
     }
     public bool InitBoards(int Rows, int Columns, int Mines)
@@ -62,16 +68,13 @@ public class GameController : MonoBehaviour
     }
 
     // Initialize n players, h of them being human players
-    public bool InitPlayers(int n, int h)
+    public bool InitPlayers()
     {
-        _players = new Player[2];
-
-        _players[0] = new Player();
-            _players[0].UpdateUI();
-
-        _players[1] = new Monster();
-            _players[1].UpdateUI();
-
+        GameObject _p = (GameObject)GameObject.Instantiate( Resources.Load("Prefabs/Player") );
+        _player = _p.GetComponent<Player>();
+        
+        GameObject _m = (GameObject)GameObject.Instantiate( Resources.Load("Prefabs/Monster") );
+        _monster = _m.GetComponent<Monster>(); 
         return true;
     }
     #endregion
@@ -84,11 +87,8 @@ public class GameController : MonoBehaviour
         {
             Destroy(_boards[i]._parent);
         }
-        for(int i = 0; i < _players.Length; ++i)
-        {
-            _players[i] = null;
-        }
-
+        Destroy(GameObject.FindGameObjectWithTag("Bot"));
+        Destroy(GameObject.FindGameObjectWithTag("Player"));
         
     }
     public Vector3 SetOrigin(int m)
@@ -137,7 +137,7 @@ public class GameController : MonoBehaviour
                 CheckMineCount(i);
             }
         }
-        Debug.Log("Incoming: "+incoming_count);
+        //Debug.Log("Incoming: "+incoming_count);
     }
 
     public void CheckMineCount(int ID) 
@@ -152,7 +152,7 @@ public class GameController : MonoBehaviour
         {
             if(!_boards[i].Active) {
                 _boards[i].Reset(mines);
-                RandomizeButtons();
+                RandomizeBoardChoice();
                 return;
             }
         }
@@ -166,27 +166,32 @@ public class GameController : MonoBehaviour
         }
     }
 
-    public void PlayerTakeDamage(int ID, int amount)
+    public void PlayerTakeDamage(GameObject t, int amount)
     {
+        Player target = t.GetComponent<Player>();
+        
         incoming_count--;
-        //Debug.Log("Incoming: "+incoming_count);
-        if(_players[ID].TakeDamage(amount) <= 0) 
+        if(target.TakeDamage(amount) <= 0)
         {
-            if(_players[ID].type == PlayerType.HUMAN) 
+            if(target.type == PlayerType.BOT) 
             {
-                PlayMakerUtils.SendEventToGameObjectFsmByName(null, GameObject.FindWithTag("GameController"), "FSM_GameController", 
-                                                        "GAMEOVER",null);
+                if(incoming_count <= 0) {
+                    _monster.UpdateUI();
+                    Destroy(GameObject.FindWithTag("Bot"));
+                    
+                    GameObject _m = (GameObject)GameObject.Instantiate( Resources.Load("Prefabs/Monster") );
+                    _monster = _m.GetComponent<Monster>(); 
+                    
+                }
             }
             else {
-                if(incoming_count <= 0) {
-                    _players[ID] = new Monster();
-                    _players[ID].UpdateUI();
-                }
+                PlayMakerUtils.SendEventToGameObjectFsmByName(null, GameObject.FindWithTag("GameController"), "FSM_GameController", 
+                                                        "GAMEOVER",null);
             }
         }
     }
 
-    public void RandomizeButtons()
+    public void RandomizeBoardChoice()
     {
         // 12 - 15 - 18 - 21 - 24
         System.Random rand = new System.Random();
@@ -200,22 +205,22 @@ public class GameController : MonoBehaviour
             switch (value)
             {
                 case 0:
-                    ButtonValue.Value = 12;
+                    BoardChoice[i] = 12;
                     break;
                 case 1:
-                    ButtonValue.Value = 15;
+                    BoardChoice[i] = 15;
                     break;
                 case 2:
-                    ButtonValue.Value = 18;
+                    BoardChoice[i] = 18;
                     break;
                 case 3:
-                    ButtonValue.Value = 21;
+                    BoardChoice[i] = 21;
                     break;
                 case 4:
-                    ButtonValue.Value = 24;
+                    BoardChoice[i] = 24;
                     break;
                 default:
-                    ButtonValue.Value = 95;
+                    BoardChoice[i] = 95;
                     break;
             }
 
@@ -229,6 +234,11 @@ public class GameController : MonoBehaviour
         {
             if(_boards[i].Active) _boards[i].OpenAll();
         }
+    }
+
+    public void UpdateBtnUI(int index)
+    {
+
     }
 
 }

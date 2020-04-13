@@ -9,6 +9,7 @@ TagManager:
   - BotUI
   - Bot
   - Waypoint
+  - UI
   layers:
   - Default
   - TransparentFX
