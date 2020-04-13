@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 42938266, guid: e743331561ef77147ae48cda9bcb8209, type: 3}
+  m_Name: PlayMakerGlobals
+  m_EditorClassIdentifier: 
+  variables:
+    floatVariables: []
+    intVariables:
+    - useVariable: 1
+      name: 
+      tooltip: 
+      showInInspector: 0
+      networkSync: 0
+      value: 0
+    - useVariable: 1
+      name: BOARD_ROWS
+      tooltip: Number of tile in a single row
+      showInInspector: 0
+      networkSync: 0
+      value: 12
+    - useVariable: 1
+      name: BOARD_COLUMNS
+      tooltip: Number of tile in a single column
+      showInInspector: 0
+      networkSync: 0
+      value: 8
+    - useVariable: 1
+      name: BOARD_MINES
+      tooltip: 
+      showInInspector: 0
+      networkSync: 0
+      value: 4
+    boolVariables:
+    - useVariable: 1
+      name: GAME_OVER
+      tooltip: 
+      showInInspector: 0
+      networkSync: 0
+      value: 0
+    stringVariables: []
+    vector2Variables: []
+    vector3Variables: []
+    colorVariables: []
+    rectVariables: []
+    quaternionVariables: []
+    gameObjectVariables: []
+    objectVariables: []
+    materialVariables: []
+    textureVariables: []
+    arrayVariables: []
+    enumVariables: []
+    categories:
+    - 
+    variableCategoryIDs: 0000000000000000000000000000000000000000
+  events:
+  - FLAG_TILE
+  - TILE_RIGHT_CLICK
+  - MINE_DETONATED
+  - INIT_OK
+  - GLOBAL_PLAYER_DEAL_DAMAGE
+  - GLOBAL_PLAYER_TAKE_DAMAGE
+  - GLOBAL_LEFT_CLICK
+  - GLOBAL_RIGHT_CLICK
+  - RESET_TILE
